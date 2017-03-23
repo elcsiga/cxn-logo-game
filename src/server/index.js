@@ -1,5 +1,7 @@
 var express = require('express')
+var bodyParser = require('body-parser')
 var app = express()
+app.use(bodyParser());
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
@@ -28,6 +30,16 @@ app.get('/', function (req, res) {
         console.log(userScore);
         res.send(userScore);
     })
+})
+
+app.post('/addScore', function (req, res) {
+    console.log(req.body)
+    var newUserScore = new UserScore(req.body);
+
+    newUserScore.save(function (err, userScore) {
+      if (err) return console.error(err);
+       res.send('success');
+    });
 })
 
 app.listen(3000, function () {
