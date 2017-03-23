@@ -3,19 +3,26 @@ import PathSeq from 'pathseg';
 import Matter from 'matter-js';
 import $ from 'jquery';
 
-const logoSVG = require('../resources/logo_segments_3.svg');
+const logoSVG = require('../resources/logo_segments_5.svg');
 const ballPNG = require('../resources/ball.png');
-const backgroundPNG = require('../resources/logo_segments_3.png');
+//const ballShadowPNG = require('../resources/ball.png');
+const backgroundPNG = require('../resources/wood_full.png');
+const logoPNG = require('../resources/wood_layer.png');
 
-const ballSize = 8;
-const scaleFactor = 12;
+const ballSize = 7;
+const ballImageContentRatio = 0.3;
+
+const scaleFactor = 10;
 const offsetX = -.5 * scaleFactor / 15;
 const offsetY = -73.5 * scaleFactor / 15;
+const debug = false;
 
 class Scene extends React.Component {
     componentDidMount() {
         // create an engine
         const engine = Matter.Engine.create();
+        engine.world.gravity.x = 0;
+        engine.world.gravity.y = 0.5;
 
         const width = this.props.width;
         const height = this.props.height;
@@ -77,53 +84,59 @@ class Scene extends React.Component {
                 }
             }, true);
 
-            engine.world.gravity.x = 0;
-            engine.world.gravity.y = 0.5;
-
             Matter.World.add(engine.world, logo);
 
-
-            // create two boxes and a ground
-
+            // bslld
             for (let i = 0; i<10; i++) {
                 balls.push(Matter.Bodies.circle(width/2, i*10+30, ballSize));
 
                 var img = document.createElement("IMG");
                 img.src = ballPNG;
-                img.style.width = 2*ballSize+'px';
-                img.style.height = 2*ballSize+'px';
+                img.style.width = 2*ballSize/ballImageContentRatio+'px';
+                img.style.height = 2*ballSize/ballImageContentRatio+'px';
                 img.style.position = 'absolute';
                 img.style.top = '100px';
                 img.style.left = '100px';
-
+                if (debug)
+                    img.style.opacity = 0.1;
                 self.ballContainer.appendChild(img);
 
                 ballsImgs.push(img);
             }
             Matter.World.add(engine.world, balls);
 
-            const ground = Matter.Bodies.rectangle(width/2, height, width, 10, {isStatic: true});
-            Matter.World.add(engine.world, [ground]);
+            /*
+            const groundWidth = 10;
+            const w = 30*scaleFactor;
+            const h = 40*scaleFactor;
+            Matter.World.add(engine.world, [
+                Matter.Bodies.rectangle(w/2, 0,   w, groundWidth, {isStatic: true}),
+                Matter.Bodies.rectangle(w/2, h,   w, groundWidth, {isStatic: true}),
+                Matter.Bodies.rectangle(0,   h/2, groundWidth, h, {isStatic: true}),
+                Matter.Bodies.rectangle(w,   h/2, groundWidth, h, {isStatic: true}),
+            ]);*/
         });
 
         // run the engine
         Matter.Engine.run(engine);
 
         // run the renderer
-        //Matter.Render.run(render);
+        if (debug)
+            Matter.Render.run(render);
 
+        //let a = 0;
         (function renderBalls() {
             window.requestAnimationFrame(renderBalls);
             for (let i = 0; i<balls.length; i++) {
                 const pos = balls[i].position;
                 const img = ballsImgs[i];
-                img.style.left = pos.x - ballSize + 'px';
-                img.style.top = pos.y - ballSize + 'px';
-
+                img.style.left = pos.x - ballSize/ballImageContentRatio + 'px';
+                img.style.top = pos.y - ballSize/ballImageContentRatio + 'px';
             }
+            //a+= 0.005;
+            //engine.world.gravity.x = Math.sin(a);
+            //engine.world.gravity.y = Math.cos(a);
         })();
-
-
 
         window.addEventListener('deviceorientation', function(event) {
             const orientation = window.orientation;
@@ -165,11 +178,9 @@ class Scene extends React.Component {
                         position: 'absolute',
                         left: this.props.width / 2 -(30 * scaleFactor) /2 + offsetX,
                         top: this.props.height / 2 -(40 * scaleFactor) /2 + offsetY,
-                        //marginLeft: ,
                         width: 30 * scaleFactor,
-                        //marginTop:,
                         height: 40 * scaleFactor,
-                        border: '1px solid blue'
+                        opacity: debug ? 0.1 : 1
                     }}
                 />
                 <div
@@ -183,6 +194,17 @@ class Scene extends React.Component {
                     }}
                     ref={(e) => this.ballContainer = e}>
                 </div>
+                <img
+                    src = {logoPNG}
+                    style={{
+                        position: 'absolute',
+                        left: this.props.width / 2 -(30 * scaleFactor) /2 + offsetX,
+                        top: this.props.height / 2 -(40 * scaleFactor) /2 + offsetY,
+                        width: 30 * scaleFactor,
+                        height: 40 * scaleFactor,
+                        opacity: debug ? 0.1 : 1
+                    }}
+                />
             </div>
         );
     }
