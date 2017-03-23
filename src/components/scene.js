@@ -4,6 +4,13 @@ import Matter from 'matter-js';
 import $ from 'jquery';
 
 const logoSVG = require('../resources/logo_segments_3.svg');
+const ballPNG = require('../resources/ball.png');
+const backgroundPNG = require('../resources/logo_segments_3.png');
+
+const ballSize = 8;
+const scaleFactor = 12;
+const offsetX = -.5 * scaleFactor / 15;
+const offsetY = -73.5 * scaleFactor / 15;
 
 class Scene extends React.Component {
     componentDidMount() {
@@ -22,9 +29,29 @@ class Scene extends React.Component {
                 height: height,
 
                 wireframes: true,
-                showInternalEdges: true
+                background: 'rgba(0,0,0,0.5)',
+
+                showSleeping: false,
+                showDebug: true,
+                showBroadphase: false,
+                showBounds: false,
+                showVelocity: false,
+                showCollisions: false,
+                showSeparations: false,
+                showAxes: true,
+                showPositions: true,
+                showAngleIndicator: false,
+                showIds: false,
+                showShadows: false,
+                showVertexNumbers: false,
+                showConvexHulls: false,
+                showInternalEdges: true,
+                showMousePosition: false
             }
         });
+
+        const balls = [];
+        const ballsImgs = [];
 
 
         const self = this;
@@ -37,8 +64,8 @@ class Scene extends React.Component {
             });
 
             const convertedVertexSets = vertexSets.map(vertexSet => vertexSet.map( wertex => ({
-                x: wertex.x*10,
-                y: wertex.y*10
+                x: wertex.x*scaleFactor,
+                y: wertex.y*scaleFactor
             })));
 
             const logo = Matter.Bodies.fromVertices(width/2, height/2, convertedVertexSets, {
@@ -50,14 +77,28 @@ class Scene extends React.Component {
                 }
             }, true);
 
+            engine.world.gravity.x = 0;
+            engine.world.gravity.y = 0.5;
+
             Matter.World.add(engine.world, logo);
 
 
             // create two boxes and a ground
-            const balls = [];
 
             for (let i = 0; i<10; i++) {
-                balls.push(Matter.Bodies.circle(width/2, i*10+30, 6));
+                balls.push(Matter.Bodies.circle(width/2, i*10+30, ballSize));
+
+                var img = document.createElement("IMG");
+                img.src = ballPNG;
+                img.style.width = 2*ballSize+'px';
+                img.style.height = 2*ballSize+'px';
+                img.style.position = 'absolute';
+                img.style.top = '100px';
+                img.style.left = '100px';
+
+                self.ballContainer.appendChild(img);
+
+                ballsImgs.push(img);
             }
             Matter.World.add(engine.world, balls);
 
@@ -69,7 +110,20 @@ class Scene extends React.Component {
         Matter.Engine.run(engine);
 
         // run the renderer
-        Matter.Render.run(render);
+        //Matter.Render.run(render);
+
+        (function renderBalls() {
+            window.requestAnimationFrame(renderBalls);
+            for (let i = 0; i<balls.length; i++) {
+                const pos = balls[i].position;
+                const img = ballsImgs[i];
+                img.style.left = pos.x - ballSize + 'px';
+                img.style.top = pos.y - ballSize + 'px';
+
+            }
+        })();
+
+
 
         window.addEventListener('deviceorientation', function(event) {
             const orientation = window.orientation;
@@ -93,14 +147,42 @@ class Scene extends React.Component {
 
     render() {
         return (
-            <div
-                style={{
-                    width: this.props.width,
-                    height: this.props.height,
-                    border: '1px solid blue',
-                    margin: '0 auto'
-                }}
-                ref={(e) => this.sceneElement = e}>
+            <div>
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: this.props.width,
+                        height: this.props.height,
+                        margin: 0
+                    }}
+                    ref={(e) => this.sceneElement = e}>
+                </div>
+                <img
+                    src = {backgroundPNG}
+                    style={{
+                        position: 'absolute',
+                        left: this.props.width / 2 -(30 * scaleFactor) /2 + offsetX,
+                        top: this.props.height / 2 -(40 * scaleFactor) /2 + offsetY,
+                        //marginLeft: ,
+                        width: 30 * scaleFactor,
+                        //marginTop:,
+                        height: 40 * scaleFactor,
+                        border: '1px solid blue'
+                    }}
+                />
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: this.props.width,
+                        height: this.props.height,
+                        margin: 0
+                    }}
+                    ref={(e) => this.ballContainer = e}>
+                </div>
             </div>
         );
     }
