@@ -21,6 +21,9 @@ let config = Object.assign({}, baseConfig, {
     new webpack.NoErrorsPlugin(),
     new BowerWebpackPlugin({
       searchResolveModulesDirectories: false
+    }),
+    new webpack.ProvidePlugin({
+      decomp: 'poly-decomp'
     })
   ],
   module: defaultSettings.getDefaultModules()
