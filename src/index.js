@@ -1,8 +1,30 @@
 import 'core-js/fn/object/assign';
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import App from './components/main';
+import Scene from './components/scene';
 import LandingPage from './components/LandingPage';
 
-// Render the main component into the dom
-ReactDOM.render(<LandingPage/>, document.getElementById('app'));
+const appElement = document.getElementById('app');
+
+function requestFullscreen() {
+    const element = document.documentElement;
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
+    }
+}
+
+function renderScene() {
+    ReactDOM.unmountComponentAtNode(appElement);
+    ReactDOM.render(<Scene width={window.innerWidth} height={window.innerHeight}/>, appElement);
+}
+
+ReactDOM.render(<LandingPage/>, appElement);
+
+document.addEventListener('click', function () {
+    requestFullscreen();
+    window.screen.orientation.lock('portrait-primary').then(renderScene).catch(renderScene);
+});
