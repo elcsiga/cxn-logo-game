@@ -30,7 +30,7 @@ function handleFullscreenChange() {
 
 ReactDOM.render(<LandingPage/>, appElement);
 
-document.addEventListener('click', requestFullscreen);
+// document.addEventListener('click', requestFullscreen);
 
 document.addEventListener('fullscreenchange', handleFullscreenChange);
 document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
