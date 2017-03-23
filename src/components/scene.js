@@ -21,7 +21,7 @@ class Scene extends React.Component {
 
 
         const self = this;
-        const svgFile = 'https://shared.chemaxon.com/users/akovacs76/svg/test.svg';
+        const svgFile = 'https://shared.chemaxon.com/users/akovacs76/svg/logo_segments.svg';
         $.get(svgFile).done(function(data) {
             var vertexSets = [];
 
@@ -31,7 +31,14 @@ class Scene extends React.Component {
                 vertexSets.push(Matter.Svg.pathToVertices(path, 30));
             });
 
-            const terrain = Matter.Bodies.fromVertices(self.props.width/2, self.props.height/2, vertexSets, {
+            const convertedVertexSets = vertexSets.map(vertexSet => vertexSet.map( wertex => ({
+                x: wertex.x*10,
+                y: wertex.y*10
+            })));
+
+
+            console.log('WSET',vertexSets);
+            const logo = Matter.Bodies.fromVertices(self.props.width/2, self.props.height/2, convertedVertexSets, {
                 isStatic: true,
                 render: {
                     fillStyle: '#2e2b44',
@@ -40,7 +47,7 @@ class Scene extends React.Component {
                 }
             }, true);
 
-            Matter.World.add(engine.world, terrain);
+            Matter.World.add(engine.world, logo);
 
             /*var bodyOptions = {
                 frictionAir: 0,
@@ -55,17 +62,16 @@ class Scene extends React.Component {
             }));*/
         });
 
-
-
-
-
         // create two boxes and a ground
-        const ball = Matter.Bodies.circle(this.props.width/2, 30, 20);
+        const balls = [];
+
+        for (let i = 0; i<10; i++) {
+            balls.push(Matter.Bodies.circle(this.props.width/2, i*10+30, 6));
+        }
+        Matter.World.add(engine.world, balls);
 
         const ground = Matter.Bodies.rectangle(this.props.width/2, this.props.height, this.props.width, 10, {isStatic: true});
-
-        // add all of the bodies to the world
-        Matter.World.add(engine.world, [ball, ground]);
+        Matter.World.add(engine.world, [ground]);
 
         // run the engine
         Matter.Engine.run(engine);

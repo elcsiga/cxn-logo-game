@@ -68,7 +68,7 @@
     "body-parser": "^1.17.1",
     "core-js": "^2.0.0",
     "jquery": "^3.2.1",
-    "matter-js": "^0.12.0",
+    "matter-js": "https://github.com/elcsiga/matter-js.git",
     "mongoose": "^4.9.1",
     "normalize.css": "^4.0.0",
     "pathseg": "^1.0.2",
