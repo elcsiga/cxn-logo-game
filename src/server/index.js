@@ -18,29 +18,28 @@ var userSchema = mongoose.Schema({
 
 var UserScore = mongoose.model('UserScore', userSchema);
 
-// var fluffy = new Kitten({ name: 'fluffy' });
-
-// fluffy.save(function (err, fluffy) {
-//   if (err) return console.error(err);
-// });
-
 app.get('/', function (req, res) {
     UserScore.find(function (err, userScore) {
         if (err) return console.error(err);
-        console.log(userScore);
         res.send(userScore);
     })
-})
+});
 
 app.post('/addScore', function (req, res) {
-    console.log(req.body)
     var newUserScore = new UserScore(req.body);
 
     newUserScore.save(function (err, userScore) {
       if (err) return console.error(err);
        res.send('success');
     });
-})
+});
+
+app.get('/getScores', function (req, res) {
+    UserScore.find(function (err, userScores) {
+        if (err) return console.error(err);
+        res.send(userScores);
+    })
+});
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
