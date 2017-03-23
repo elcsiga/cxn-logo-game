@@ -78,6 +78,25 @@ class Scene extends React.Component {
 
         // run the renderer
         Matter.Render.run(render);
+
+        window.addEventListener('deviceorientation', function(event) {
+            const orientation = window.orientation;
+            const gravity = engine.world.gravity;
+
+            if (orientation === 0) {
+                gravity.x = Matter.Common.clamp(event.gamma, -90, 90) / 90;
+                gravity.y = Matter.Common.clamp(event.beta, -90, 90) / 90;
+            } else if (orientation === 180) {
+                gravity.x = Matter.Common.clamp(event.gamma, -90, 90) / 90;
+                gravity.y = Matter.Common.clamp(-event.beta, -90, 90) / 90;
+            } else if (orientation === 90) {
+                gravity.x = Matter.Common.clamp(event.beta, -90, 90) / 90;
+                gravity.y = Matter.Common.clamp(-event.gamma, -90, 90) / 90;
+            } else if (orientation === -90) {
+                gravity.x = Matter.Common.clamp(-event.beta, -90, 90) / 90;
+                gravity.y = Matter.Common.clamp(event.gamma, -90, 90) / 90;
+            }
+        }, true);
     }
 
     render() {
