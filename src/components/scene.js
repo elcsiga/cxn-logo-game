@@ -45,7 +45,17 @@ class Scene extends React.Component {
         }
     }
 
+    startGame() {
+        this.setState({score: 0});
+        this.spawnBalls(1);
+    }
+    stopGame() {
+        while (this.balls.length) {
+            this.removeBall(0);
+        }
+    }
     onBallInHole(i) {
+        this.setState({score: this.state.score + 1});
         this.removeBall(i);
         this.spawnBalls(2);
     }
