@@ -94,10 +94,13 @@ class LandingPage extends Component {
         }, DOM.button({
             style: {
                 height: '50px',
-                width: '100px'
+                width: '200px',
+                backgroundColor: 'cadetblue',
+                fontWeight: '700',
+                fontSize: '16px'
             },
             onClick: requestFullscreen
-        }, 'Start game'));
+        }, 'Start Chemaxon Logo game'));
     }
 
     renderLogin() {
