@@ -273,9 +273,9 @@ class Scene extends React.Component {
         };
         window.addEventListener('deviceorientation', this.orentationHandler, true);
 
-        window.addEventListener('keypress', function(){
-            self.onBallInHole(0);
-        }, true);
+        // window.addEventListener('keypress', function(){
+        //     self.onBallInHole(0);
+        // }, true);
     }
 
     componentWillUnMount() {
@@ -361,7 +361,7 @@ class Scene extends React.Component {
                         this.stopGame();
                     }}
                 >END</div>
-                {this.state.state === STATES.RESULT ? <ResultPage result={100}
+                {this.state.state === STATES.RESULT ? <ResultPage result={this.state.score}
                     save={this.saveResult.bind(this)}/> : null}
                 {this.state.state === STATES.SCORES ? <ScoresPage scores={this.state.scores}
                     back={() => this.setState({state: STATES.GAME})}/> : null}
