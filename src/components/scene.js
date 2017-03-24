@@ -301,7 +301,8 @@ class Scene extends React.Component {
                         // this.saveResult();
                     }}
                 >END</div>
-                {this.state.state === STATES.RESULT ? <ResultPage userName={'Jozsi'} result={100}/> : null}
+                {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100} save={userName => this.setState({state: STATES.SCORES})}/> : null}
+                {this.state.state === STATES.SCORES ? <ScoresPage scores={[{name: 'Jozsi', score: 100}]}/> : null}
             </div>
         );
     }

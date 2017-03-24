@@ -9,7 +9,7 @@ class ResultPage extends Component {
         this.displayName = 'ResultPage';
 
         this.state = {
-            userName: ''
+            userName: props.userName
         }
     }
 
@@ -27,8 +27,7 @@ class ResultPage extends Component {
                 msUserSelect: 'none',
                 fontFamily: 'Roboto, sans-serif'
             }
-        }, this.renderMask(), this.renderTitle(), this.props.userName ? this.renderResult(this.props.userName, this.props.result) :
-            this.renderInput());
+        }, this.renderMask(), this.renderTitle(), this.renderResult(this.state.userName, this.props.result), this.renderSave());
     }
 
     renderMask() {
@@ -65,9 +64,10 @@ class ResultPage extends Component {
                 fontSize: '30px',
                 display: 'flex',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 zIndex: 150
             }
-        }, this.renderName(name), this.renderScore(result));
+        }, name ? this.renderName(name) : this.renderInput(), this.renderScore(result));
     }
 
     renderName(name) {
@@ -79,9 +79,26 @@ class ResultPage extends Component {
     }
 
     renderInput() {
-        if (this.state.userName) {
-            return null;
-        }
+        return DOM.input({
+            onChange: event => this.setState({
+                userName: event.value
+            }),
+            value: this.state.userName
+        });
+    }
+
+    renderSave() {
+        return DOM.div({
+            style: {
+                zIndex: 150
+            }
+        }, DOM.button({
+            style: {
+                height: '50px',
+                width: '100px'
+            },
+            onClick: () => this.props.save(this.state.userName)
+        }, 'Save'));
     }
 }
 
