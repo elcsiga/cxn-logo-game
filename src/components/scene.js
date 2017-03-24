@@ -10,6 +10,8 @@ const ballPNG = require('../resources/ball.png');
 //const ballShadowPNG = require('../resources/ball.png');
 const backgroundPNG = require('../resources/wood_full.png');
 const logoPNG = require('../resources/wood_layer.png');
+const holePNG = require('../resources/hole.png');
+
 const STATES = {SCORES: 'SCORES', GAME: 'GAME', RESULT: 'RESULT'};
 
 class Scene extends React.Component {
@@ -284,6 +286,7 @@ class Scene extends React.Component {
     }
 
     render() {
+        const holeSize = 60;
         return (
             <div style={{height: '100%'}}>
                 <div
@@ -306,6 +309,17 @@ class Scene extends React.Component {
                         width: 30 * this.scaleFactor,
                         height: 40 * this.scaleFactor,
                         opacity: this.debug ? 0.1 : 1
+                    }}
+                />
+                <img
+                    src = {holePNG}
+                    style={{
+                        position: 'absolute',
+                        left: this.width / 2 -holeSize/2 + this.scaleFactor * 0.1,
+                        top: this.height / 2 -holeSize/2 + this.scaleFactor * 5.9,
+                        width: holeSize,
+                        height: holeSize,
+                        opacity: this.debug ? 0.1 : .7
                     }}
                 />
                 <div
