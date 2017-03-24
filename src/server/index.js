@@ -41,10 +41,10 @@ app.post('/addScore', function (req, res) {
 });
 
 app.get('/getScores', function (req, res) {
-    UserScore.find(function (err, userScores) {
+    UserScore.find().limit(10).sort({score: -1}).exec(function (err, userScores) {
         if (err) return console.error(err);
         res.send(userScores);
-    })
+    });
 });
 
 app.listen(3000, function () {
