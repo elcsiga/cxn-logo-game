@@ -19,8 +19,8 @@ class Scene extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            second: ('0' + 5).slice(-2),
-            minute: ('0' + 0).slice(-2),
+            second: ('0' + 59).slice(-2),
+            minute: ('0' + 1).slice(-2),
             score: 0,
             state: STATES.GAME
         };
@@ -51,7 +51,7 @@ class Scene extends React.Component {
 
         this.setState({
             second: ('0' + 59).slice(-2),
-            minute: ('0' + 2).slice(-2),
+            minute: ('0' + 1).slice(-2),
             score: 0
         });
         this.timer = setInterval(() => this.startTimer(), 1000);
