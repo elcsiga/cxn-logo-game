@@ -381,10 +381,10 @@ class Scene extends React.Component {
     }
 
     saveResult(userName) {
-        $.post( "http://localhost:3000/addScore",
+        $.post( "http://logogame.bpo.cxn:3000/addScore",
             { name: userName, score: this.state.score },
             ( data ) => {
-                $.get( "http://localhost:3000/getScores", (data) => {
+                $.get( "http://logogame.bpo.cxn:3000/getScores", (data) => {
                     this.setState({
                         state: STATES.SCORES,
                         scores: data
