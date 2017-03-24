@@ -362,18 +362,25 @@ class Scene extends React.Component {
                     }}
                 >END</div>
                 {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100}
-                    save={userName => this.setState({state: STATES.SCORES})}/> : null}
+                    save={this.saveResult.bind(this)}/> : null}
                 {this.state.state === STATES.SCORES ? <ScoresPage scores={[{name: 'Jozsi', score: 100}, {name: 'Jozsi2', score: 1002}]}
                     back={() => this.setState({state: STATES.GAME})}/> : null}
             </div>
         );
     }
 
-    saveResult() {
-        $.post( '/addScore', { name: 'John', score: 100 }).done(function(data) {
-            console.log( 'Data Loaded: ' + data );
-            $.get('/getScores').done(result => console.log(result));
-        });
+    saveResult(userName) {
+        $.post( "http://localhost:3000/addScore",
+            { name: userName, score: this.state.score },
+            ( data ) => {
+                $.get( "http://localhost:3000/getScores", (data) => {
+                    this.setState({
+                        state: STATES.SCORES,
+                        scores: data
+                    });
+                })
+            }
+        );
     }
 }
 

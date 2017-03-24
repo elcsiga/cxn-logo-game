@@ -67,7 +67,7 @@ class ResultPage extends Component {
                 alignItems: 'center',
                 zIndex: 150
             }
-        }, name ? this.renderName(name) : this.renderInput(), this.renderScore(result));
+        }, this.renderInput(), this.renderScore(result));
     }
 
     renderName(name) {
@@ -81,7 +81,7 @@ class ResultPage extends Component {
     renderInput() {
         return DOM.input({
             onChange: event => this.setState({
-                userName: event.value
+                userName: event.target.value
             }),
             value: this.state.userName
         });
