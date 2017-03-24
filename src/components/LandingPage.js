@@ -1,6 +1,6 @@
 'use strict';
 
-import {DOM, Component, createFactory, PropTypes, createElement} from 'react';
+import {DOM, Component, createElement} from 'react';
 import logoImage from '../resources/logo.svg'
 import FacebookLogin from 'react-facebook-login';
 
@@ -37,13 +37,12 @@ class LandingPage extends Component {
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
                 flexDirection: 'column',
                 WebkitUserSelect: 'none',
                 MozUserSelect: 'none',
-                msUserSelect: 'none',
+                msUserSelect: 'none'
             }
-        }, this.renderLogo(), this.renderTitle(), this.renderLogin(), this.renderStartButton());
+        }, this.renderLogo(), this.renderTitle(), this.renderStart());
     }
 
     renderLogo() {
@@ -74,12 +73,31 @@ class LandingPage extends Component {
         }, 'Move your ball into the hole!');
     }
 
+    renderStart() {
+        return DOM.div({
+            style: {
+                height: '100%',
+                display: 'flex',
+                paddingTop: '30px',
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center'
+            }
+        }, this.renderLogin(), this.renderStartButton());
+    }
+
     renderStartButton() {
-        return (
-            DOM.div({
-                onClick: requestFullscreen
-            }, 'Start game')
-        )
+        return DOM.div({
+            style: {
+                paddingTop: '10px'
+            }
+        }, DOM.button({
+            style: {
+                height: '50px',
+                width: '100px'
+            },
+            onClick: requestFullscreen
+        }, 'Start game'));
     }
 
     renderLogin() {

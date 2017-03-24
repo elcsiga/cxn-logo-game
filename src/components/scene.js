@@ -112,7 +112,6 @@ class Scene extends React.Component {
         });
     }
 
-
     componentWillUpdate(nextProps, nextState) {
         if(nextState.state ===STATES.GAME && this.state.state !== STATES.GAME) {
             this.setState({
