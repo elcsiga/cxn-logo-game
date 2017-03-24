@@ -83,7 +83,7 @@ class LandingPage extends Component {
                 flexDirection: 'column',
                 justifyContent: 'center'
             }
-        }, this.renderLogin(), this.renderStartButton());
+        }, this.renderStartButton());
     }
 
     renderStartButton() {
