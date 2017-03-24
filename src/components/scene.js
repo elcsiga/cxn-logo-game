@@ -1,5 +1,5 @@
 import React from 'react';
-import PathSeq from 'pathseg';
+import 'pathseg';
 import Matter from 'matter-js';
 import $ from 'jquery';
 
@@ -17,12 +17,14 @@ class Scene extends React.Component {
         this.width = props.width;
         this.height = props.height;
 
-        this.ballSize = 7;
+        this.scaleFactor = Math.min(
+            this.width / 30,
+            this.height / 40,
+        );
+
+        this.ballSize = 0.7 * this.scaleFactor;
         this.ballImageContentRatio = 0.3; //how big is the ball in the full transparent image
 
-        this.scaleFactor = 10;
-        this.offsetX = -.5 * this.scaleFactor / 15; //calibration based on then origo inside svg
-        this.offsetY = -73.5 * this.scaleFactor / 15;
         this.debug = false;
     }
 
@@ -84,7 +86,7 @@ class Scene extends React.Component {
 
             const convertedVertexSets = vertexSets.map(vertexSet => vertexSet.map( wertex => ({
                 x: wertex.x*scaleFactor,
-                y: wertex.y*scaleFactor
+                y: ( wertex.y + 367 ) * scaleFactor
             })));
 
             const logo = Matter.Bodies.fromVertices(width/2, height/2, convertedVertexSets, {
@@ -102,7 +104,7 @@ class Scene extends React.Component {
             for (let i = 0; i<10; i++) {
                 balls.push(Matter.Bodies.circle(width/2, i*10+30, ballSize));
 
-                var img = document.createElement("IMG");
+                var img = document.createElement('IMG');
                 img.src = ballPNG;
                 img.style.width = 2*ballSize/ballImageContentRatio+'px';
                 img.style.height = 2*ballSize/ballImageContentRatio+'px';
@@ -125,7 +127,7 @@ class Scene extends React.Component {
                 Matter.Bodies.rectangle(w/2, 0,   w, groundWidth, {isStatic: true}),
                 Matter.Bodies.rectangle(w/2, h,   w, groundWidth, {isStatic: true}),
                 Matter.Bodies.rectangle(0,   h/2, groundWidth, h, {isStatic: true}),
-                Matter.Bodies.rectangle(w,   h/2, groundWidth, h, {isStatic: true}),
+                Matter.Bodies.rectangle(w,   h/2, groundWidth, h, {isStatic: true})
             ]);
         });
 
@@ -196,8 +198,8 @@ class Scene extends React.Component {
                     src = {backgroundPNG}
                     style={{
                         position: 'absolute',
-                        left: this.width / 2 -(30 * this.scaleFactor) /2 + this.offsetX,
-                        top: this.height / 2 -(40 * this.scaleFactor) /2 + this.offsetY,
+                        left: this.width / 2 -(30 * this.scaleFactor) /2,
+                        top: this.height / 2 -(40 * this.scaleFactor) /2,
                         width: 30 * this.scaleFactor,
                         height: 40 * this.scaleFactor,
                         opacity: this.debug ? 0.1 : 1
@@ -218,8 +220,8 @@ class Scene extends React.Component {
                     src = {logoPNG}
                     style={{
                         position: 'absolute',
-                        left: this.width / 2 -(30 * this.scaleFactor) /2 + this.offsetX,
-                        top: this.height / 2 -(40 * this.scaleFactor) /2 + this.offsetY,
+                        left: this.width / 2 -(30 * this.scaleFactor) /2,
+                        top: this.height / 2 -(40 * this.scaleFactor) /2,
                         width: 30 * this.scaleFactor,
                         height: 40 * this.scaleFactor,
                         opacity: this.debug ? 0.1 : 1
