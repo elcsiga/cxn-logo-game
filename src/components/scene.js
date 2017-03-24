@@ -46,13 +46,25 @@ class Scene extends React.Component {
     }
 
     startGame() {
-        this.setState({score: 0});
+
+        this.setState({
+            second: ('0' + 59).slice(-2),
+            minute: ('0' + 2).slice(-2),
+            score: 0
+        });
+        this.timer = setInterval(() => this.startTimer(), 1000);
         this.spawnBalls(1);
     }
     stopGame() {
         while (this.balls.length) {
             this.removeBall(0);
         }
+
+        clearInterval(this.timer)
+        this.setState({
+            state: STATES.RESULT
+        });
+        // this.saveResult();
     }
     onBallInHole(i) {
         this.setState({score: this.state.score + 1});
@@ -124,11 +136,7 @@ class Scene extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
         if(nextState.state ===STATES.GAME && this.state.state !== STATES.GAME) {
-            this.setState({
-                second: ('0' + 59).slice(-2),
-                minute: ('0' + 2).slice(-2)
-            })
-            this.timer = setInterval(() => this.startTimer(), 1000);
+            this.startGame();
         }
     }
 
@@ -265,9 +273,9 @@ class Scene extends React.Component {
         };
         window.addEventListener('deviceorientation', this.orentationHandler, true);
 
-        /*window.addEventListener('keypress', function(){
+        window.addEventListener('keypress', function(){
             self.onBallInHole(0);
-        }, true);*/
+        }, true);
     }
 
     componentWillUnMount() {
@@ -350,11 +358,7 @@ class Scene extends React.Component {
                         right: '10px'
                     }}
                     onClick={() => {
-                        clearInterval(this.timer)
-                        this.setState({
-                            state: STATES.RESULT
-                        });
-                        // this.saveResult();
+                        this.stopGame();
                     }}
                 >END</div>
                 {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100}
