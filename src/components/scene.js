@@ -2,18 +2,26 @@ import React from 'react';
 import 'pathseg';
 import Matter from 'matter-js';
 import $ from 'jquery';
+import ScoresPage from './ScoresPage';
+import ResultPage from './ResultPage';
 
 const logoSVG = require('../resources/logo_segments_5.svg');
 const ballPNG = require('../resources/ball.png');
 //const ballShadowPNG = require('../resources/ball.png');
 const backgroundPNG = require('../resources/wood_full.png');
 const logoPNG = require('../resources/wood_layer.png');
-
+const STATES = {SCORES: 'SCORES', GAME: 'GAME', RESULT: 'RESULT'};
 
 class Scene extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            second: ('0' + 5).slice(-2),
+            minute: ('0' + 2).slice(-2),
+            score: 0,
+            state: STATES.GAME
+        };
         this.width = props.width;
         this.height = props.height;
 
@@ -64,6 +72,31 @@ class Scene extends React.Component {
         const ballImageContentRatio = this.ballImageContentRatio;
         const scaleFactor = this.scaleFactor;
         const debug = this.debug;
+
+        this.timer = setInterval(() => {
+            let second = --this.state.second;
+            let minute = this.state.minute;
+
+            if(second === 0 && minute === '00') {
+                clearInterval(this.timer);
+                second = ('0' + second).slice(-2);
+                this.setState({
+                    second,
+                    minute
+                });
+                return;
+            }
+            if(second === -1) {
+                second = 59;
+                --minute;
+            }
+            second = ('0' + second).slice(-2);
+            minute = ('0' + minute).slice(-2);
+            this.setState({
+                second,
+                minute
+            });
+        }, 1000);
 
         // create a renderer
         const render = Matter.Render.create({
@@ -188,7 +221,7 @@ class Scene extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{height: '100%'}}>
                 <div
                     style={{
                         position: 'absolute',
@@ -233,8 +266,51 @@ class Scene extends React.Component {
                         opacity: this.debug ? 0.1 : 1
                     }}
                 />
+                <div
+                    style={{
+                        position: 'fixed',
+                        right: '0px',
+                        width: '200px',
+                        padding: '10px',
+                        fontFamily: 'Roboto, sans-serif',
+                        fontSize: '30px'
+                    }}>{`Time: ${this.state.minute}:${this.state.second}`}
+                </div>
+                <div
+                    style={{
+                        position: 'fixed',
+                        right: '0px',
+                        top: '30px',
+                        width: '200px',
+                        padding: '10px',
+                        fontFamily: 'Roboto, sans-serif',
+                        fontSize: '30px'
+                    }}>{`Score: ${this.state.score}`}
+                </div>
+                <div
+                    style={{
+                        position: 'fixed',
+                        bottom: '10px',
+                        right: '10px'
+                    }}
+                    onClick={() => {
+                        clearInterval(this.timer)
+                        this.setState({
+                            state: STATES.RESULT
+                        });
+                        // this.saveResult();
+                    }}
+                >END</div>
+                {this.state.state === STATES.RESULT ? <ResultPage userName={'Jozsi'} result={100}/> : null}
             </div>
         );
+    }
+
+    saveResult() {
+        $.post( '/addScore', { name: 'John', score: 100 }).done(function(data) {
+            console.log( 'Data Loaded: ' + data );
+            $.get('/getScores').done(result => console.log(result));
+        });
     }
 }
 

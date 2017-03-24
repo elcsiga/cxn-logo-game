@@ -1,25 +1,12 @@
 'use strict';
 
 import {DOM, Component, createFactory, PropTypes, createElement} from 'react';
-import logoImage from '../resources/logo.svg'
-import FacebookLogin from 'react-facebook-login';
 
-function requestFullscreen() {
-    const element = document.documentElement;
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen();
-    }
-}
-
-class LandingPage extends Component {
+class ScoresPage extends Component {
 
     constructor(props) {
         super(props);
-        this.displayName = 'LandingPage';
+        this.displayName = 'ScoresPage';
 
         this.state = {
             userName: null
@@ -42,11 +29,12 @@ class LandingPage extends Component {
                 WebkitUserSelect: 'none',
                 MozUserSelect: 'none',
                 msUserSelect: 'none',
+                fontFamily: 'Roboto, sans-serif'
             }
-        }, this.renderLogo(), this.renderTitle(), this.renderLogin(), this.renderStartButton());
+        }, this.renderMask(), this.renderTitle(), this.props.scores.map(score => this.renderScore(score)));
     }
 
-    renderLogo() {
+    renderMask() {
         return DOM.div({
             style: {
                 position: 'fixed',
@@ -66,18 +54,20 @@ class LandingPage extends Component {
             style: {
                 paddingTop: '30px',
                 fontSize: '60px',
-                fontFamily: 'Roboto, sans-serif',
                 fontWeight: '700',
                 width: '60%',
                 textAlign: 'center'
             }
-        }, 'Move your ball into the hole!');
+        }, 'Scores');
     }
 
-    renderStartButton() {
+    renderScore(score) {
         return (
             DOM.div({
-                onClick: requestFullscreen
+                style: {
+                    width: '200px',
+                    fontSize: '30px'
+                }
             }, 'Start game')
         )
     }
@@ -97,29 +87,6 @@ class LandingPage extends Component {
             })
         );
     }
-
-    onLoginClick() {
-        this.checkLoginState();
-    }
-
-    checkLoginState() {
-        if (window.FB) {
-            FB.getLoginStatus((response) => {
-                if (response.status === 'connected') {
-                    FB.api(
-                        '/' + response.authResponse.userID,
-                        (response) => {
-                            if (response && !response.error) {
-                                this.setState({
-                                    userName: response.name
-                                })
-                            }
-                        }
-                    );
-                }
-            });
-        }
-    }
 }
 
-export default LandingPage;
+export default ScoresPage;

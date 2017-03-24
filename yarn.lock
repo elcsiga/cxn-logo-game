@@ -978,7 +978,7 @@ bluebird@^2.9.27:
   version "2.11.0"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
 
-body-parser@^1.12.4:
+body-parser@^1.12.4, body-parser@^1.17.1:
   version "1.17.1"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/body-parser/-/body-parser-1.17.1.tgz#75b3bc98ddd6e7e0d8ffe750dfaca5c66993fa47"
   dependencies:
@@ -1570,15 +1570,9 @@ debug@2.3.3:
   dependencies:
     ms "0.7.2"
 
-debug@2.6.1:
+debug@2.6.1, debug@^2.1.1, debug@^2.2.0:
   version "2.6.1"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
-  dependencies:
-    ms "0.7.2"
-
-debug@^2.1.1, debug@^2.2.0:
-  version "2.6.3"
-  resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/debug/-/debug-2.6.3.tgz#0f7eb8c30965ec08c72accfa0130c8b79984141d"
   dependencies:
     ms "0.7.2"
 
@@ -3181,9 +3175,9 @@ math-expression-evaluator@^1.2.14:
   version "1.2.16"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/math-expression-evaluator/-/math-expression-evaluator-1.2.16.tgz#b357fa1ca9faefb8e48d10c14ef2bcb2d9f0a7c9"
 
-matter-js@^0.12.0:
+"matter-js@https://github.com/elcsiga/matter-js.git":
   version "0.12.0"
-  resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/matter-js/-/matter-js-0.12.0.tgz#dcb02d04326c47746c63a3772d1475753d72fe1e"
+  resolved "https://github.com/elcsiga/matter-js.git#818541857c7d5f7ccba4c5ac8eab76da6ddaca22"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -3321,7 +3315,7 @@ mongodb-core@2.1.9:
     bson "~1.0.4"
     require_optional "~1.0.0"
 
-mongodb@2.2.25:
+mongodb@2.2.25, mongodb@^2.2.25:
   version "2.2.25"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/mongodb/-/mongodb-2.2.25.tgz#d3b25dad00eda2bdfcbc996210ba082ac686a6b6"
   dependencies:
@@ -4155,6 +4149,10 @@ react-dom@^15.0.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
+react-facebook-login@^3.5.0:
+  version "3.5.0"
+  resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/react-facebook-login/-/react-facebook-login-3.5.0.tgz#6a3199e025bac814b2617fe3ae15f86799a402f8"
+
 react-hot-api@^0.4.5:
   version "0.4.7"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/react-hot-api/-/react-hot-api-0.4.7.tgz#a7e22a56d252e11abd9366b61264cf4492c58171"
@@ -4189,7 +4187,7 @@ read-pkg@^1.0.0:
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
 
-readable-stream@2.1.5:
+readable-stream@2.1.5, readable-stream@^2.1.5:
   version "2.1.5"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/readable-stream/-/readable-stream-2.1.5.tgz#66fa8b720e1438b364681f2ad1a63c618448c9d0"
   dependencies:
@@ -4201,7 +4199,7 @@ readable-stream@2.1.5:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
-"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.1.0, readable-stream@^2.1.4, readable-stream@^2.1.5, readable-stream@^2.2.2:
+"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.1.0, readable-stream@^2.1.4, readable-stream@^2.2.2:
   version "2.2.6"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/readable-stream/-/readable-stream-2.2.6.tgz#8b43aed76e71483938d12a8d46c6cf1a00b1f816"
   dependencies:
@@ -5204,9 +5202,9 @@ websocket-extensions@>=0.1.1:
   version "0.1.1"
   resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/websocket-extensions/-/websocket-extensions-0.1.1.tgz#76899499c184b6ef754377c2dbb0cd6cb55d29e7"
 
-whatwg-fetch@>=0.10.0:
-  version "2.0.3"
-  resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
+whatwg-fetch@2.0.1, whatwg-fetch@>=0.10.0:
+  version "2.0.1"
+  resolved "https://artifacts.chemaxon.com:443/artifactory/api/npm/npm-virtual/whatwg-fetch/-/whatwg-fetch-2.0.1.tgz#078b9461bbe91cea73cbce8bb122a05f9e92b772"
 
 whet.extend@~0.9.9:
   version "0.9.9"
