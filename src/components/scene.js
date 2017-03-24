@@ -37,8 +37,23 @@ class Scene extends React.Component {
 
         this.balls = [];
         this.ballsImgs = [];
+
+        this.logoCenterRadius = this.ballSize * 2;
+        this.logoCenter = {
+            x: this.width / 2 + 0.1 * this.scaleFactor,
+            y: this.height / 2 + 6 * this.scaleFactor
+        }
     }
 
+    onBallInHole(i) {
+        this.removeBall(i);
+        this.spawnBalls(2);
+    }
+    spawnBalls(n) {
+        for (let i = 0; i<n; i++) {
+            this.spawnBall(this.width/2, (i*1.5 + 10) * this.ballSize);
+        }
+    }
     spawnBall(x,y) {
         const ball = Matter.Bodies.circle(x,y, this.ballSize);
         this.balls.push(ball);
@@ -57,6 +72,19 @@ class Scene extends React.Component {
         this.ballContainer.appendChild(img);
 
         this.ballsImgs.push(img);
+
+
+    }
+
+    removeBall(i) {
+        const ball = this.balls[i];
+        console.log('RRRRRRRr', ball, this.engine.world);
+        Matter.World.remove(this.engine.world,ball);
+        this.balls.splice(i, 1);
+
+        const img = this.ballsImgs[i];
+        this.ballContainer.removeChild(img);
+        this.ballsImgs.splice(i, 1);
     }
 
     startTimer() {
@@ -99,7 +127,7 @@ class Scene extends React.Component {
         // create an engine
         const engine = Matter.Engine.create();
         engine.world.gravity.x = 0;
-        engine.world.gravity.y = 0.5;
+        engine.world.gravity.y = 1;
         this.engine = engine;
 
         const width = this.width;
@@ -167,9 +195,7 @@ class Scene extends React.Component {
             Matter.World.add(engine.world, logo);
 
             // balls
-            for (let i = 0; i<10; i++) {
-                self.spawnBall(width/2, i*10+30);
-            }
+            self.spawnBalls(1);
 
             const groundWidth = 10;
             const w = width;
@@ -197,6 +223,13 @@ class Scene extends React.Component {
                 const img = self.ballsImgs[i];
                 img.style.left = pos.x - ballSize/ballImageContentRatio + 'px';
                 img.style.top = pos.y - ballSize/ballImageContentRatio + 'px';
+
+                const dx = pos.x - self.logoCenter.x;
+                const dy = pos.y - self.logoCenter.y;
+
+                if (Math.sqrt(dx*dx + dy*dy) < self.logoCenterRadius) {
+                    self.onBallInHole(i);
+                }
             }
             //a+= 0.005;
             //engine.world.gravity.x = Math.sin(a);
@@ -222,6 +255,10 @@ class Scene extends React.Component {
             }
         };
         window.addEventListener('deviceorientation', this.orentationHandler, true);
+
+        /*window.addEventListener('keypress', function(){
+            self.onBallInHole(0);
+        }, true);*/
     }
 
     componentWillUnMount() {
