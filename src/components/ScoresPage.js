@@ -24,14 +24,14 @@ class ScoresPage extends Component {
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                // justifyContent: 'space-between',
                 flexDirection: 'column',
                 WebkitUserSelect: 'none',
                 MozUserSelect: 'none',
                 msUserSelect: 'none',
                 fontFamily: 'Roboto, sans-serif'
             }
-        }, this.renderMask(), this.renderTitle(), this.props.scores.map(score => this.renderScore(score)));
+        }, this.renderMask(), this.renderTitle(), this.props.scores.map((score, index) => this.renderScore(score, index)), this.renderBack());
     }
 
     renderMask() {
@@ -40,11 +40,9 @@ class ScoresPage extends Component {
                 position: 'fixed',
                 width: '100%',
                 height: '100%',
-                background: `url('${logoImage}')`,
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                opacity: '0.2',
-                pointerEvents: 'none'
+                opacity: '0.5',
+                backgroundColor: 'white',
+                zIndex: 100
             }
         });
     }
@@ -56,36 +54,47 @@ class ScoresPage extends Component {
                 fontSize: '60px',
                 fontWeight: '700',
                 width: '60%',
-                textAlign: 'center'
+                textAlign: 'center',
+                zIndex: 150
             }
         }, 'Scores');
     }
 
-    renderScore(score) {
-        return (
-            DOM.div({
-                style: {
-                    width: '200px',
-                    fontSize: '30px'
-                }
-            }, 'Start game')
-        )
+    renderScore(score, index) {
+        console.log(score)
+        return DOM.div({
+            key: index,
+            style: {
+                width: '200px',
+                fontSize: '30px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                zIndex: 150
+            }
+        }, this.renderName(score.name), this.renderResult(score.score));
     }
 
-    renderLogin() {
-        if (this.state.userName) {
-            return null;
-        }
+    renderName(name) {
+        return DOM.div(null, name);
+    }
 
-        return (
-            createElement(FacebookLogin, {
-                appId: '332367813827911',
-                autoLoad: true,
-                fields: 'name',
-                onClick: this.checkLoginState.bind(this),
-                callback: this.checkLoginState.bind(this)
-            })
-        );
+    renderResult(score) {
+        return DOM.div(null, score);
+    }
+
+    renderBack() {
+        return DOM.div({
+            style: {
+                zIndex: 150
+            }
+        }, DOM.button({
+            style: {
+                height: '50px',
+                width: '100px'
+            },
+            onClick: () => this.props.back()
+        }, 'New Game'));
     }
 }
 

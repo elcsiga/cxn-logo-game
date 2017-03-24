@@ -17,7 +17,7 @@ class Scene extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            second: ('0' + 5).slice(-2),
+            second: ('0' + 59).slice(-2),
             minute: ('0' + 2).slice(-2),
             score: 0,
             state: STATES.GAME
@@ -59,6 +59,42 @@ class Scene extends React.Component {
         this.ballsImgs.push(img);
     }
 
+    startTimer() {
+        let second = --this.state.second;
+        let minute = this.state.minute;
+
+        if(second === 0 && minute === '00') {
+            clearInterval(this.timer);
+            second = ('0' + second).slice(-2);
+            this.setState({
+                second,
+                minute
+            });
+            return;
+        }
+        if(second === -1) {
+            second = 59;
+            --minute;
+        }
+        second = ('0' + second).slice(-2);
+        minute = ('0' + minute).slice(-2);
+        this.setState({
+            second,
+            minute
+        });
+    }
+
+
+    componentWillUpdate(nextProps, nextState) {
+        if(nextState.state ===STATES.GAME && this.state.state !== STATES.GAME) {
+            this.setState({
+                second: ('0' + 59).slice(-2),
+                minute: ('0' + 2).slice(-2)
+            })
+            this.timer = setInterval(() => this.startTimer(), 1000);
+        }
+    }
+
     componentDidMount() {
         // create an engine
         const engine = Matter.Engine.create();
@@ -73,30 +109,7 @@ class Scene extends React.Component {
         const scaleFactor = this.scaleFactor;
         const debug = this.debug;
 
-        this.timer = setInterval(() => {
-            let second = --this.state.second;
-            let minute = this.state.minute;
-
-            if(second === 0 && minute === '00') {
-                clearInterval(this.timer);
-                second = ('0' + second).slice(-2);
-                this.setState({
-                    second,
-                    minute
-                });
-                return;
-            }
-            if(second === -1) {
-                second = 59;
-                --minute;
-            }
-            second = ('0' + second).slice(-2);
-            minute = ('0' + minute).slice(-2);
-            this.setState({
-                second,
-                minute
-            });
-        }, 1000);
+        this.timer = setInterval(() => this.startTimer(), 1000);
 
         // create a renderer
         const render = Matter.Render.create({
@@ -127,9 +140,6 @@ class Scene extends React.Component {
                 showMousePosition: false
             }
         });
-
-
-
 
         const self = this;
         $.get(logoSVG).done(function(data) {
@@ -301,8 +311,10 @@ class Scene extends React.Component {
                         // this.saveResult();
                     }}
                 >END</div>
-                {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100} save={userName => this.setState({state: STATES.SCORES})}/> : null}
-                {this.state.state === STATES.SCORES ? <ScoresPage scores={[{name: 'Jozsi', score: 100}]}/> : null}
+                {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100}
+                    save={userName => this.setState({state: STATES.SCORES})}/> : null}
+                {this.state.state === STATES.SCORES ? <ScoresPage scores={[{name: 'Jozsi', score: 100}, {name: 'Jozsi2', score: 1002}]}
+                    back={() => this.setState({state: STATES.GAME})}/> : null}
             </div>
         );
     }
