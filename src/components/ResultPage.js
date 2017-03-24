@@ -9,7 +9,7 @@ class ResultPage extends Component {
         this.displayName = 'ResultPage';
 
         this.state = {
-            userName: props.userName
+            userName: ''
         }
     }
 

@@ -361,9 +361,9 @@ class Scene extends React.Component {
                         this.stopGame();
                     }}
                 >END</div>
-                {this.state.state === STATES.RESULT ? <ResultPage userName={''} result={100}
+                {this.state.state === STATES.RESULT ? <ResultPage result={100}
                     save={this.saveResult.bind(this)}/> : null}
-                {this.state.state === STATES.SCORES ? <ScoresPage scores={[{name: 'Jozsi', score: 100}, {name: 'Jozsi2', score: 1002}]}
+                {this.state.state === STATES.SCORES ? <ScoresPage scores={this.state.scores}
                     back={() => this.setState({state: STATES.GAME})}/> : null}
             </div>
         );
