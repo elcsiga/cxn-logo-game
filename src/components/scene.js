@@ -26,6 +26,29 @@ class Scene extends React.Component {
         this.ballImageContentRatio = 0.3; //how big is the ball in the full transparent image
 
         this.debug = false;
+
+        this.balls = [];
+        this.ballsImgs = [];
+    }
+
+    spawnBall(x,y) {
+        const ball = Matter.Bodies.circle(x,y, this.ballSize);
+        this.balls.push(ball);
+        Matter.World.add(this.engine.world, ball);
+
+        var img = document.createElement('IMG');
+        img.src = ballPNG;
+        img.style.width = 2*this.ballSize/this.ballImageContentRatio+'px';
+        img.style.height = 2*this.ballSize/this.ballImageContentRatio+'px';
+        img.style.position = 'absolute';
+        img.style.left = x - this.ballSize/this.ballImageContentRatio + 'px';
+        img.style.top = y - this.ballSize/this.ballImageContentRatio + 'px';
+
+        if (this.debug)
+            img.style.opacity = 0.1;
+        this.ballContainer.appendChild(img);
+
+        this.ballsImgs.push(img);
     }
 
     componentDidMount() {
@@ -33,6 +56,7 @@ class Scene extends React.Component {
         const engine = Matter.Engine.create();
         engine.world.gravity.x = 0;
         engine.world.gravity.y = 0.5;
+        this.engine = engine;
 
         const width = this.width;
         const height = this.height;
@@ -71,8 +95,7 @@ class Scene extends React.Component {
             }
         });
 
-        const balls = [];
-        const ballsImgs = [];
+
 
 
         const self = this;
@@ -100,25 +123,10 @@ class Scene extends React.Component {
 
             Matter.World.add(engine.world, logo);
 
-            // bslld
+            // balls
             for (let i = 0; i<10; i++) {
-                balls.push(Matter.Bodies.circle(width/2, i*10+30, ballSize));
-
-                var img = document.createElement('IMG');
-                img.src = ballPNG;
-                img.style.width = 2*ballSize/ballImageContentRatio+'px';
-                img.style.height = 2*ballSize/ballImageContentRatio+'px';
-                img.style.position = 'absolute';
-                img.style.top = '100px';
-                img.style.left = '100px';
-                if (debug)
-                    img.style.opacity = 0.1;
-                self.ballContainer.appendChild(img);
-
-                ballsImgs.push(img);
+                self.spawnBall(width/2, i*10+30);
             }
-            Matter.World.add(engine.world, balls);
-
 
             const groundWidth = 10;
             const w = width;
@@ -141,9 +149,9 @@ class Scene extends React.Component {
         //let a = 0;
         (function renderBalls() {
             window.requestAnimationFrame(renderBalls);
-            for (let i = 0; i<balls.length; i++) {
-                const pos = balls[i].position;
-                const img = ballsImgs[i];
+            for (let i = 0; i<self.balls.length; i++) {
+                const pos = self.balls[i].position;
+                const img = self.ballsImgs[i];
                 img.style.left = pos.x - ballSize/ballImageContentRatio + 'px';
                 img.style.top = pos.y - ballSize/ballImageContentRatio + 'px';
             }
@@ -171,8 +179,6 @@ class Scene extends React.Component {
             }
         };
         window.addEventListener('deviceorientation', this.orentationHandler, true);
-
-        this.engine = engine;
     }
 
     componentWillUnMount() {
