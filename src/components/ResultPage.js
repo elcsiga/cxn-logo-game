@@ -47,7 +47,7 @@ class ResultPage extends Component {
         return DOM.div({
             style: {
                 paddingTop: '30px',
-                fontSize: '60px',
+                fontSize: '30px',
                 fontWeight: '700',
                 width: '60%',
                 textAlign: 'center',
@@ -62,9 +62,10 @@ class ResultPage extends Component {
                 paddingTop: '15px',
                 width: '300px',
                 fontSize: '30px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                textAlign: 'center',
+               // display: 'flex',
+               // justifyContent: 'space-between',
+               // alignItems: 'center',
                 zIndex: 150
             }
         }, this.renderInput(), this.renderScore(result));
@@ -80,6 +81,7 @@ class ResultPage extends Component {
 
     renderInput() {
         return DOM.input({
+            placeholder: 'Enter your name',
             onChange: event => this.setState({
                 userName: event.target.value
             }),
@@ -94,8 +96,14 @@ class ResultPage extends Component {
             }
         }, DOM.button({
             style: {
+                marginTop: '30px',
                 height: '50px',
-                width: '100px'
+                width: '100px',
+                color: 'white',
+                backgroundColor: 'cadetblue',
+                fontWeight: '700',
+                fontSize: '16px',
+                opacity: 0.9
             },
             onClick: () => this.props.save(this.state.userName)
         }, 'Save'));

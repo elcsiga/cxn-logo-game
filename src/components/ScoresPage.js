@@ -51,7 +51,7 @@ class ScoresPage extends Component {
         return DOM.div({
             style: {
                 paddingTop: '30px',
-                fontSize: '60px',
+                fontSize: '30px',
                 fontWeight: '700',
                 width: '60%',
                 textAlign: 'center',
@@ -61,12 +61,11 @@ class ScoresPage extends Component {
     }
 
     renderScore(score, index) {
-        console.log(score)
         return DOM.div({
             key: index,
             style: {
                 width: '200px',
-                fontSize: '30px',
+                fontSize: '18px',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -91,7 +90,12 @@ class ScoresPage extends Component {
         }, DOM.button({
             style: {
                 height: '50px',
-                width: '100px'
+                width: '100px',
+                color: 'white',
+                backgroundColor: 'cadetblue',
+                fontWeight: '700',
+                fontSize: '16px',
+                opacity: 0.9
             },
             onClick: () => this.props.back()
         }, 'New Game'));

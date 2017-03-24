@@ -42,7 +42,7 @@ class LandingPage extends Component {
                 MozUserSelect: 'none',
                 msUserSelect: 'none'
             }
-        }, this.renderLogo(), this.renderTitle(), this.renderStart());
+        }, this.renderLogo(), /*, this.renderTitle(),*/ this.renderStart());
     }
 
     renderLogo() {
@@ -93,14 +93,16 @@ class LandingPage extends Component {
             }
         }, DOM.button({
             style: {
+                color: 'white',
                 height: '50px',
                 width: '200px',
                 backgroundColor: 'cadetblue',
                 fontWeight: '700',
-                fontSize: '16px'
+                fontSize: '16px',
+                opacity: 0.9
             },
             onClick: requestFullscreen
-        }, 'Start Chemaxon Logo game'));
+        }, 'START GAME'));
     }
 
     renderLogin() {

@@ -19,8 +19,8 @@ class Scene extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            second: ('0' + 59).slice(-2),
-            minute: ('0' + 2).slice(-2),
+            second: ('0' + 5).slice(-2),
+            minute: ('0' + 0).slice(-2),
             score: 0,
             state: STATES.GAME
         };
@@ -62,11 +62,12 @@ class Scene extends React.Component {
             this.removeBall(0);
         }
 
-        clearInterval(this.timer)
+        clearInterval(this.timer);
         this.setState({
-            state: STATES.RESULT
+            state: STATES.RESULT,
+            second: '00'
         });
-        // this.saveResult();
+
     }
     onBallInHole(i) {
         this.setState({score: this.state.score + 1});
@@ -116,12 +117,7 @@ class Scene extends React.Component {
         let minute = this.state.minute;
 
         if(second === 0 && minute === '00') {
-            clearInterval(this.timer);
-            second = ('0' + second).slice(-2);
-            this.setState({
-                second,
-                minute
-            });
+            this.stopGame();
             return;
         }
         if(second === -1) {
@@ -351,21 +347,22 @@ class Scene extends React.Component {
                         width: '200px',
                         padding: '10px',
                         fontFamily: 'Roboto, sans-serif',
-                        fontSize: '30px'
+                        fontSize: '18px',
+                        textAlign: 'right'
                     }}>{`Time: ${this.state.minute}:${this.state.second}`}
                 </div>
                 <div
                     style={{
                         position: 'fixed',
-                        right: '0px',
-                        top: '30px',
+                        left: '0px',
+                        top: '0px',
                         width: '200px',
                         padding: '10px',
                         fontFamily: 'Roboto, sans-serif',
-                        fontSize: '30px'
+                        fontSize: '18px'
                     }}>{`Score: ${this.state.score}`}
                 </div>
-                <div
+                {/*<div
                     style={{
                         position: 'fixed',
                         bottom: '10px',
@@ -374,7 +371,7 @@ class Scene extends React.Component {
                     onClick={() => {
                         this.stopGame();
                     }}
-                >END</div>
+                >END</div>*/}
                 {this.state.state === STATES.RESULT ? <ResultPage result={this.state.score}
                     save={this.saveResult.bind(this)}/> : null}
                 {this.state.state === STATES.SCORES ? <ScoresPage scores={this.state.scores}
