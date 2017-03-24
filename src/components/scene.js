@@ -9,23 +9,35 @@ const ballPNG = require('../resources/ball.png');
 const backgroundPNG = require('../resources/wood_full.png');
 const logoPNG = require('../resources/wood_layer.png');
 
-const ballSize = 7;
-const ballImageContentRatio = 0.3;
-
-const scaleFactor = 10;
-const offsetX = -.5 * scaleFactor / 15;
-const offsetY = -73.5 * scaleFactor / 15;
-const debug = false;
 
 class Scene extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.width = props.width;
+        this.height = props.height;
+
+        this.ballSize = 7;
+        this.ballImageContentRatio = 0.3; //how big is the ball in the full transparent image
+
+        this.scaleFactor = 10;
+        this.offsetX = -.5 * this.scaleFactor / 15; //calibration based on then origo inside svg
+        this.offsetY = -73.5 * this.scaleFactor / 15;
+        this.debug = false;
+    }
+
     componentDidMount() {
         // create an engine
         const engine = Matter.Engine.create();
         engine.world.gravity.x = 0;
         engine.world.gravity.y = 0.5;
 
-        const width = this.props.width;
-        const height = this.props.height;
+        const width = this.width;
+        const height = this.height;
+        const ballSize = this.ballSize;
+        const ballImageContentRatio = this.ballImageContentRatio;
+        const scaleFactor = this.scaleFactor;
+        const debug = this.debug;
 
         // create a renderer
         const render = Matter.Render.create({
@@ -105,16 +117,16 @@ class Scene extends React.Component {
             }
             Matter.World.add(engine.world, balls);
 
-            /*
+
             const groundWidth = 10;
-            const w = 30*scaleFactor;
-            const h = 40*scaleFactor;
+            const w = width;
+            const h = height;
             Matter.World.add(engine.world, [
                 Matter.Bodies.rectangle(w/2, 0,   w, groundWidth, {isStatic: true}),
                 Matter.Bodies.rectangle(w/2, h,   w, groundWidth, {isStatic: true}),
                 Matter.Bodies.rectangle(0,   h/2, groundWidth, h, {isStatic: true}),
                 Matter.Bodies.rectangle(w,   h/2, groundWidth, h, {isStatic: true}),
-            ]);*/
+            ]);
         });
 
         // run the engine
@@ -138,7 +150,7 @@ class Scene extends React.Component {
             //engine.world.gravity.y = Math.cos(a);
         })();
 
-        window.addEventListener('deviceorientation', function(event) {
+        this.orentationHandler = function(event) {
             const orientation = window.orientation;
             const gravity = engine.world.gravity;
 
@@ -155,7 +167,15 @@ class Scene extends React.Component {
                 gravity.x = Matter.Common.clamp(-event.beta, -90, 90) / 90;
                 gravity.y = Matter.Common.clamp(event.gamma, -90, 90) / 90;
             }
-        }, true);
+        };
+        window.addEventListener('deviceorientation', this.orentationHandler, true);
+
+        this.engine = engine;
+    }
+
+    componentWillUnMount() {
+        window.removeEventListener('deviceorientation', this.orentationHandler);
+        Matter.Engine.clear(this.engine);
     }
 
     render() {
@@ -166,8 +186,8 @@ class Scene extends React.Component {
                         position: 'absolute',
                         top: 0,
                         left: 0,
-                        width: this.props.width,
-                        height: this.props.height,
+                        width: this.width,
+                        height: this.height,
                         margin: 0
                     }}
                     ref={(e) => this.sceneElement = e}>
@@ -176,11 +196,11 @@ class Scene extends React.Component {
                     src = {backgroundPNG}
                     style={{
                         position: 'absolute',
-                        left: this.props.width / 2 -(30 * scaleFactor) /2 + offsetX,
-                        top: this.props.height / 2 -(40 * scaleFactor) /2 + offsetY,
-                        width: 30 * scaleFactor,
-                        height: 40 * scaleFactor,
-                        opacity: debug ? 0.1 : 1
+                        left: this.width / 2 -(30 * this.scaleFactor) /2 + this.offsetX,
+                        top: this.height / 2 -(40 * this.scaleFactor) /2 + this.offsetY,
+                        width: 30 * this.scaleFactor,
+                        height: 40 * this.scaleFactor,
+                        opacity: this.debug ? 0.1 : 1
                     }}
                 />
                 <div
@@ -188,8 +208,8 @@ class Scene extends React.Component {
                         position: 'absolute',
                         top: 0,
                         left: 0,
-                        width: this.props.width,
-                        height: this.props.height,
+                        width: this.width,
+                        height: this.height,
                         margin: 0
                     }}
                     ref={(e) => this.ballContainer = e}>
@@ -198,11 +218,11 @@ class Scene extends React.Component {
                     src = {logoPNG}
                     style={{
                         position: 'absolute',
-                        left: this.props.width / 2 -(30 * scaleFactor) /2 + offsetX,
-                        top: this.props.height / 2 -(40 * scaleFactor) /2 + offsetY,
-                        width: 30 * scaleFactor,
-                        height: 40 * scaleFactor,
-                        opacity: debug ? 0.1 : 1
+                        left: this.width / 2 -(30 * this.scaleFactor) /2 + this.offsetX,
+                        top: this.height / 2 -(40 * this.scaleFactor) /2 + this.offsetY,
+                        width: 30 * this.scaleFactor,
+                        height: 40 * this.scaleFactor,
+                        opacity: this.debug ? 0.1 : 1
                     }}
                 />
             </div>
