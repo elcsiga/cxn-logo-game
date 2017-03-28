@@ -268,6 +268,10 @@ class Scene extends React.Component {
                 gravity.x = Matter.Common.clamp(-event.beta, -90, 90) / 90;
                 gravity.y = Matter.Common.clamp(event.gamma, -90, 90) / 90;
             }
+
+            const GRAVITY_FACTOR = 3.0;
+            gravity.x = Matter.Common.clamp(gravity.x * GRAVITY_FACTOR, -1, 1);
+            gravity.y = Matter.Common.clamp(gravity.y * GRAVITY_FACTOR, -1, 1);
         };
         window.addEventListener('deviceorientation', this.orentationHandler, true);
 
